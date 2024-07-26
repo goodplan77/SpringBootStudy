@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menu">
+	<select id="selectMenus" resultMap="menuMap">
+		SELECT *
+		FROM MENU
+		ORDER BY ID DESC
+	</select>
+	<resultMap id="menuMap" type="menu">
+		<result column="type" property="type" typeHandler="menuTypeHandler"/>
+		<result column="taste" property="taste" typeHandler="menuTasteHandler"/>
+	</resultMap>
+	
+	<insert id="insertMenu">
+		INSERT INTO MENU VALUES (
+			SEQ_MENU_ID.NEXTVAL , 
+			#{restaurant},
+			#{name},
+			#{price},
+			#{type , typeHandler = menuTypeHandler},
+			#{taste , typeHandler = menuTasteHandler}
+		)
+	</insert>
+	
+</mapper>

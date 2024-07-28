@@ -10,4 +10,6 @@ public interface MenuService {
 
 	int insertMenu(Menu menu);
 
+	List<Menu> searchMenu(Menu menu);
+
 }

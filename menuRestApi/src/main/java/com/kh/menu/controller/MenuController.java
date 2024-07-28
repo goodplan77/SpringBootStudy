@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.menu.model.service.MenuService;
 import com.kh.menu.model.vo.Menu;
+import com.kh.menu.model.vo.MenuTaste;
+import com.kh.menu.model.vo.MenuType;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +58,18 @@ public class MenuController {
 		}
 		
 		return map;
+	}
+	
+	@GetMapping("/searchMenu")
+	public List<Menu> searchMenu(HttpServletResponse response, @RequestParam String type,
+			@RequestParam String taste) {
+
+		Menu selectMenu = new Menu();
+		selectMenu.setType(MenuType.menuTypeValueOf(type));
+		selectMenu.setTaste(MenuTaste.menuTasteValueOf(taste));
+		List<Menu> list = menuService.searchMenu(selectMenu);
+
+		response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:3000");
+		return list;
 	}
 }

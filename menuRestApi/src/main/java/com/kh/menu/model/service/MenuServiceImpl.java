@@ -25,4 +25,9 @@ public class MenuServiceImpl implements MenuService{
 		return menuDao.insertMenu(menu);
 	}
 
+	@Override
+	public List<Menu> searchMenu(Menu menu) {
+		return menuDao.searchMenu(menu);
+	}
+
 }

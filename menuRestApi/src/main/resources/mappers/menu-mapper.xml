@@ -8,6 +8,7 @@
 		FROM MENU
 		ORDER BY ID DESC
 	</select>
+	
 	<resultMap id="menuMap" type="menu">
 		<result column="type" property="type" typeHandler="menuTypeHandler"/>
 		<result column="taste" property="taste" typeHandler="menuTasteHandler"/>
@@ -23,5 +24,12 @@
 			#{taste , typeHandler = menuTasteHandler}
 		)
 	</insert>
+	
+	<select id="searchMenu" resultMap="menuMap">
+		SELECT *
+		FROM MENU
+		WHERE TYPE = #{type , typeHandler = menuTypeHandler} AND TASTE = #{taste , typeHandler = menuTasteHandler}
+		ORDER BY ID DESC
+	</select>
 	
 </mapper>

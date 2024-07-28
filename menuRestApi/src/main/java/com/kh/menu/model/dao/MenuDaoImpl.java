@@ -25,4 +25,9 @@ public class MenuDaoImpl implements MenuDao{
 		return session.insert("menu.insertMenu" , menu);
 	}
 
+	@Override
+	public List<Menu> searchMenu(Menu menu) {
+		return session.selectList("menu.searchMenu" , menu);
+	}
+
 }

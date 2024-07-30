@@ -1,6 +1,7 @@
 package com.kh.menu.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -26,8 +27,23 @@ public class MenuDaoImpl implements MenuDao{
 	}
 
 	@Override
-	public List<Menu> searchMenu(Menu menu) {
-		return session.selectList("menu.searchMenu" , menu);
+	public List<Menu> selectMenuList(Map<String, Object> param) {
+		return session.selectList("menu.selectMenuList" , param);
+	}
+
+	@Override
+	public Menu selectOneMenu(String id) {
+		return session.selectOne("menu.selectOneMenu" , id);
+	}
+
+	@Override
+	public int updateMenu(Menu menu) {
+		return session.update("menu.updateMenu" , menu);
+	}
+
+	@Override
+	public int deleteMenu(String id) {
+		return session.delete("menu.deleteMenu" , id);
 	}
 
 }

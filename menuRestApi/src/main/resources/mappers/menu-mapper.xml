@@ -25,11 +25,39 @@
 		)
 	</insert>
 	
-	<select id="searchMenu" resultMap="menuMap">
+	<select id="selectMenuList" resultMap="menuMap">
 		SELECT *
 		FROM MENU
-		WHERE TYPE = #{type , typeHandler = menuTypeHandler} AND TASTE = #{taste , typeHandler = menuTasteHandler}
+		<where>
+			<if test="type != 'all'">
+				TYPE = #{type}
+			</if>
+			<if test="taste != 'all'">
+				AND TASTE = #{taste}
+			</if>
+		</where>
 		ORDER BY ID DESC
 	</select>
+	
+	<select id="selectOneMenu" resultMap="menuMap">
+		SELECT *
+		FROM MENU
+		WHERE ID = #{id}
+	</select>
+	
+	<update id="updateMenu" parameterType="menu">
+		UPDATE MENU SET
+			RESTAURANT = #{restaurant} ,
+			NAME = #{name},
+			PRICE = #{price},
+			TYPE = #{type , typeHandler = menuTypeHandler},
+			TASTE = #{taste , typeHandler = menuTasteHandler}
+		WHERE ID = #{id}
+	</update>
+	
+	<delete id="deleteMenu">
+		DELETE FROM MENU
+		WHERE ID = #{id}
+	</delete>
 	
 </mapper>

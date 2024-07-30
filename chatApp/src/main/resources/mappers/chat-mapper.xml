@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chat">
+	<select id="selectAllUser" resultType="member">
+		SELECT 
+			USER_NO,
+			NICK_NAME,
+			PROFILE
+		FROM MEMBER
+	</select>
+	
+	<select id="selectChatRooms" resultType="chatRoom">
+		SELECT
+			CHAT_ROOM_NO,
+			TITLE,
+			NICK_NAME,
+			(
+				SELECT COUNT(*) FROM CHAT_ROOM_JOIN CRJ WHERE CRJ.CHAT_ROOM_NO = CHAT_ROOM_NO
+			) CNT,
+			USER_NO
+		FROM CHAT_ROOM CR
+		LEFT JOIN MEMBER USING (USER_NO)
+	</select>
+	<insert id="openChatRoom" useGeneratedKeys="true">
+		INSERT INTO CHAT_ROOM 
+		VALUES (
+			SEQ_CRM_NO.NEXTVAL , 
+			#{title},
+			DEFAULT,
+			#{userNo}
+		)
+		
+		<selectKey keyProperty="chatRoomNo" resultType="int" order="AFTER">
+			SELECT SEQ_CRM_NO.CURRVAL FROM DUAL
+		</selectKey>
+		
+	</insert>
+</mapper>

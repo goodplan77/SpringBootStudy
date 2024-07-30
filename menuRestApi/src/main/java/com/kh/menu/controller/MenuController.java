@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,16 +64,61 @@ public class MenuController {
 		return map;
 	}
 	
-	@GetMapping("/searchMenu")
-	public List<Menu> searchMenu(HttpServletResponse response, @RequestParam String type,
-			@RequestParam String taste) {
-
-		Menu selectMenu = new Menu();
-		selectMenu.setType(MenuType.menuTypeValueOf(type));
-		selectMenu.setTaste(MenuTaste.menuTasteValueOf(taste));
-		List<Menu> list = menuService.searchMenu(selectMenu);
-
-		response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:3000");
+	@CrossOrigin(origins = {"*"}) // 모든 경로 허용?
+	@GetMapping("/searchMenu/type/{type}/taste/{taste}")
+	public List<Menu> searchMenu(
+			@PathVariable String type ,
+			@PathVariable String taste 
+			) {
+		log.debug("type = {} , taste = {}" , type , taste);
+		Map<String , Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("taste", taste);
+		
+		List<Menu> list = menuService.selectMenuList(param);
+		
 		return list;
+	}
+	
+	@CrossOrigin(origins = {"*"})
+	@GetMapping("/menu/{id}")
+	public Menu selectOneMenu(
+			@PathVariable String id
+			) {
+		Menu menu = menuService.selectOneMenu(id);
+		return menu;
+	}
+	
+	@CrossOrigin(origins = {"*"})
+	@PutMapping("/menu/{id}")
+	public ResponseEntity<String> updateMenu(
+			@RequestBody Menu menu
+			){
+		int result = menuService.updateMenu(menu);
+		if(result > 0) {
+			return ResponseEntity
+					.ok()
+					.body("수정성공");
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+		
+	}
+	
+	@CrossOrigin(origins = {"*"})
+	@DeleteMapping("/menu/{id}")
+	public String deleteMenu(
+			@PathVariable String id
+			){
+		
+		int result = menuService.deleteMenu(id);
+		
+		if(result > 0) {
+			return "삭제 성공했습니다";
+		}else {
+			return "존재하지 않는 번호입니다";
+		}
+		
+		
 	}
 }

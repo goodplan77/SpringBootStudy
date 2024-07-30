@@ -1,5 +1,5 @@
-export type MenuType = 'kr'|'jp'|'ch';
-export type MenuTaste = 'mild'|'hot';
+export type MenuType = 'all'|'kr'|'jp'|'ch';
+export type MenuTaste = 'all'|'mild'|'hot';
 
 export interface Menu{
     id : number,
@@ -22,3 +22,8 @@ export const initialMenu:Menu = {
 // (리터럴 + readonly)
 
 export const initialMenuList:Menu[] = [];
+
+export type SearchKeyword = {
+    type:MenuType;
+    taste: MenuTaste;
+}

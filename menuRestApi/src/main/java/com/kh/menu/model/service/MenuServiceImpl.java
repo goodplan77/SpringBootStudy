@@ -1,6 +1,7 @@
 package com.kh.menu.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,23 @@ public class MenuServiceImpl implements MenuService{
 	}
 
 	@Override
-	public List<Menu> searchMenu(Menu menu) {
-		return menuDao.searchMenu(menu);
+	public List<Menu> selectMenuList(Map<String, Object> param) {
+		return menuDao.selectMenuList(param);
+	}
+
+	@Override
+	public Menu selectOneMenu(String id) {
+		return menuDao.selectOneMenu(id);
+	}
+
+	@Override
+	public int updateMenu(Menu menu) {
+		return menuDao.updateMenu(menu);
+	}
+
+	@Override
+	public int deleteMenu(String id) {
+		return menuDao.deleteMenu(id);
 	}
 
 }

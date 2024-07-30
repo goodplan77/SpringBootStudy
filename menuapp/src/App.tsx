@@ -5,6 +5,8 @@ import { Route, Routes } from 'react-router-dom';
 import GetMenus from './pages/GetMenus';
 import PostMenus from './pages/PostMenus';
 import SearchMenus from './pages/SearchMenus';
+import UpdateMenus from './pages/UpdateMenus';
+import DeleteMenus from './pages/DeleteMenus';
 
 function App() {
   return (
@@ -16,8 +18,8 @@ function App() {
               <Route path="/" element={<GetMenus/>}/>
               <Route path="/search" element={<SearchMenus/>}/>
               <Route path="/insert" element={<PostMenus/>}/>
-              <Route path="/update" element={<div></div>}/>
-              <Route path="/delete" element={<div></div>}/>
+              <Route path="/update" element={<UpdateMenus/>}/>
+              <Route path="/delete" element={<DeleteMenus/>}/>
             </Routes>
         </div>
       </section>

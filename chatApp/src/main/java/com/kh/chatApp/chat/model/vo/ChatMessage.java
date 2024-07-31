@@ -13,5 +13,8 @@ public class ChatMessage {
 	private String createDate;
 	private int chatRoomNo;
 	private int userNo;
+	
+	private String nickName;
+	private String profile;
 
 }

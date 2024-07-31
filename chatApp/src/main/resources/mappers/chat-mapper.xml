@@ -17,7 +17,7 @@
 			TITLE,
 			NICK_NAME,
 			(
-				SELECT COUNT(*) FROM CHAT_ROOM_JOIN CRJ WHERE CRJ.CHAT_ROOM_NO = CHAT_ROOM_NO
+				SELECT COUNT(*) FROM CHAT_ROOM_JOIN CRJ WHERE CR.CHAT_ROOM_NO = CHAT_ROOM_NO
 			) CNT,
 			USER_NO
 		FROM CHAT_ROOM CR
@@ -35,6 +35,90 @@
 		<selectKey keyProperty="chatRoomNo" resultType="int" order="AFTER">
 			SELECT SEQ_CRM_NO.CURRVAL FROM DUAL
 		</selectKey>
+
+	</insert>
+	
+	<insert id="insertChatMessage" useGeneratedKeys="true">
+		INSERT INTO CHAT_MESSAGE
+		VALUES (
+			SEQ_CM_NO.NEXTVAL , 
+			#{message} , 
+			SYSDATE , 
+			#{chatRoomNo},
+			#{userNo}
+		)
+		
+		<selectKey keyProperty="cmNo" resultType="int" order="AFTER">
+			SELECT SEQ_CM_NO.CURRVAL FROM DUAL
+		</selectKey>
 		
 	</insert>
+	
+	<insert id="joinChatRoom">
+		INSERT INTO CHAT_ROOM_JOIN
+		VALUES (
+			#{userNo},
+			#{chatRoomNo},
+			1
+		)
+	</insert>
+	
+	<select id="selectUser" resultType="member">
+		SELECT 
+			USER_NO,
+			NICK_NAME,
+			PROFILE,
+			USER_STATUS
+		FROM MEMBER
+		LEFT JOIN CHAT_ROOM_JOIN USING(USER_NO)
+		WHERE USER_NO = #{userNo} AND CHAT_ROOM_NO = #{chatRoomNo}
+	</select>
+	
+	<select id="selectMessages" resultType="chatMessage">
+		SELECT 
+			MESSAGE,
+			TO_CHAR(CREATE_DATE , 'YYYY-MM-DD') CREATE_DATE,
+			USER_NO,
+			NICK_NAME,
+			PROFILE
+		FROM CHAT_MESSAGE
+		LEFT JOIN MEMBER USING(USER_NO)
+		WHERE CHAT_ROOM_NO = #{chatRoomNo}
+	</select>
+	
+	<select id="selectChatMessage" resultType="chatMessage">
+		SELECT 
+			MESSAGE,
+			TO_CHAR(CREATE_DATE , 'YYYY-MM-DD') CREATE_DATE,
+			USER_NO,
+			NICK_NAME,
+			PROFILE
+		FROM CHAT_MESSAGE
+		LEFT JOIN MEMBER USING(USER_NO)
+		WHERE CM_NO = #{cmNo}
+	</select>
+	
+	<select id="selectChatRoomMembers" resultType="member">
+		SELECT
+			USER_NO,
+			NICK_NAME,
+			PROFILE,
+			USER_STATUS
+		FROM CHAT_ROOM_JOIN
+		LEFT JOIN MEMBER USING(USER_NO)
+		WHERE CHAT_ROOM_NO = #{chatRoomNo}
+	</select>
+	
+	<delete id="exitMember">
+		DELETE FROM CHAT_ROOM_JOIN
+		WHERE CHAT_ROOM_NO = #{chatRoomNo} AND
+			USER_NO = #{userNo}
+	</delete>
+	
+	<update id="updateUserStatus">
+		UPDATE CHAT_ROOM_JOIN SET
+		USER_STATUS = #{userStatus}
+		WHERE CHAT_ROOM_NO = #{chatRoomNo}
+			AND USER_NO = #{userNo}
+	</update>
 </mapper>

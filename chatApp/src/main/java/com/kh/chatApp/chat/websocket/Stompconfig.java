@@ -35,6 +35,7 @@ public class Stompconfig implements WebSocketMessageBrokerConfigurer{
 		registry.
 		enableSimpleBroker("/chat");
 		
-		//
+		// 들어오는 요청에 대해서 해당하는 접두어를 붙여줌
+		registry.setApplicationDestinationPrefixes("/chat");
 	}
 }

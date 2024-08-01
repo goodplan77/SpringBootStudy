@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="auth">
+	<resultMap id="userMap" type="user">
+		<id column="USER_NO" property="userNo" />
+		<collection property="authorities"
+					javaType="list"
+					ofType="simpleGrantedAuthority"
+					select="selectAuthorities"
+					column="USER_NO"
+		/>
+	</resultMap>
+	
+	<!--setter가 없기 때문에 생성자로 생성-->
+	<resultMap id="authorityMap" type="simpleGrantedAuthority">
+		<constructor>
+			<arg column="authority" javaType="string"/>
+		</constructor>
+	</resultMap>
+	
+	<select id="loadUserByUsername" resultMap="userMap">
+		SELECT
+			*
+		FROM MEMBER
+		JOIN MEMBER_SOCIAL USING(USER_NO)
+		WHERE
+			SOCIAL_ID = #{socialId}
+			AND SOCIAL_TYPE = #{socialType}
+	</select>
+	
+	<select id="selectAuthorities" resultMap="authorityMap">
+		SELECT
+			*
+		FROM AUTHORITY
+		WHERE USER_NO = #{userNo}
+	</select>
+</mapper>

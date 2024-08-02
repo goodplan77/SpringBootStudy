@@ -26,11 +26,15 @@ export default function KakaoLoginForm({setUser}:{setUser:(data:any)=>void}){
         //         }
         //         setUser(user);
         //     })
-        axios.post("http//localhost:8084/api/auth/login/kakao",{
+        axios.post("http://localhost:8084/api/auth/login/kakao",{
             accessToken : ACCESS_TOKEN
         })
         .then(res => {
             console.log(res);
+            const Jwtoken = res.data.jwtToken;
+            setCookie("accessToken",Jwtoken);
+            setCookie("user", JSON.stringify(res.data.user));
+            setUser(res.data.user);
         })
     }
 

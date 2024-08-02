@@ -36,4 +36,35 @@
 		FROM AUTHORITY
 		WHERE USER_NO = #{userNo}
 	</select>
+	
+	<insert id="insertUser" useGeneratedKeys="true">
+		<selectKey resultType="int" order="BEFORE" keyProperty="userNo">
+			SELECT SEQ_UNO.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO MEMBER
+		VALUES (
+			#{userNo},
+			#{nickName},
+			DEFAULT,
+			DEFAULT,
+			#{profile}
+		)
+	</insert>
+	
+	<insert id="insertUserSocial">
+		INSERT INTO MEMBER_SOCIAL
+		VALUES (
+			#{socialId},
+			#{userNo},
+			#{socialType}
+		)
+	</insert>
+	
+	<insert id="insertAuthority">
+		INSERT INTO AUTHORITY
+		VALUES (
+			#{userNo},
+			'ROLE_USER'
+		)
+	</insert>
 </mapper>
